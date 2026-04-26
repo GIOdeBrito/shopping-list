@@ -98,10 +98,14 @@ class TableList
 			Aside.update();
 		});
 
-		template.querySelector('[data-field-name="price"]').addEventListener('change', () => {
+		const priceField = template.querySelector('[data-field-name="price"]');
+
+		priceField.addEventListener('change', () => {
 
 			Aside.update();
 		});
+
+		priceField.focus();
 
 		template.querySelector('[data-field-name="qtd"]').addEventListener('change', () => {
 
