@@ -1,4 +1,8 @@
 
+import ModalFactory from "./factories/modal-factory.js";
+import EanLookup from "./utility/ean-lookup.js";
+import { floatParser } from "./utility/numbers.js";
+
 window.addEventListener('load', () => {
 
 	Aside.start();
@@ -35,7 +39,7 @@ class Aside
 			this.#total.classList.add('red');
 		}
 
-		this.#total.value = value;
+		this.#total.value = `R$${value}`;
 	}
 
 	static update ()
@@ -50,8 +54,6 @@ class Aside
 		//console.log(quantities, TableList.getItemsPrices());
 
 		const value = TableList.getItemsPrices().reduce((total, current, i) => total + (current * quantities[i]), 0);
-
-		console.log(value);
 
 		this.setTotalAmount(value.toFixed(2));
 	}
@@ -80,7 +82,8 @@ class TableList
 
 		template.querySelector('button').addEventListener('pointerdown', () => {
 
-			this.addItem();
+			//this.addItem();
+			this.addItemModal();
 		});
 
 		this.#tbody.appendChild(template);
@@ -115,9 +118,51 @@ class TableList
 		this.addNewItemRequest()
 	}
 
+	static addItemModal ()
+	{
+		const modal = ModalFactory.new("add", "add-item-form");
+		const root = modal.Root;
+
+		const cover = root.querySelector('img[data-name="cover"]');
+		const ean = root.querySelector('input[data-name="ean"]');
+		const name = root.querySelector('input[data-name="name"]');
+		const quantity = root.querySelector('input[data-name="qtd"]');
+
+		const bscanner = root.querySelector('button[data-name="bscanner"]');
+		const submit = root.querySelector('button[data-name="bsubmit"]');
+
+		ean.addEventListener('change', async () => {
+
+			const data = ean.value.trim();
+
+			const item = await EanLookup.searchAsync(data);
+
+			name.value = item.name;
+			cover.src = item.imgsrc;
+		});
+
+		submit.addEventListener('pointerdown', ev => {
+
+			this.addItem();
+
+			const row = this.getLastItem();
+			row.querySelector('[data-field-name="name"]').value = name.value;
+			row.querySelector('[data-field-name="qtd"]').value = quantity.value;
+
+			modal.destroy();
+
+			row.querySelector('[data-field-name="price"]').focus();
+		});
+	}
+
+	static getLastItem ()
+	{
+		return this.#tbody.querySelector(':scope > :nth-last-child(2)');
+	}
+
 	static getItemsPrices ()
 	{
-		return [ ...this.#tbody.querySelectorAll('input[data-field-name="price"]') ].map(x => floatParser(x.value));
+		return [ ...this.#tbody.querySelectorAll('input[data-field-name="price"]') ].map(x => floatParser(x.value || 0.0));
 	}
 
 	static getItemsQuantities ()
@@ -125,9 +170,3 @@ class TableList
 		return [ ...this.#tbody.querySelectorAll('input[data-field-name="qtd"]') ].map(x => parseInt(x.value));
 	}
 }
-
-function floatParser (value)
-{
-	return parseFloat(String(value).replace(',', '.'));
-}
-

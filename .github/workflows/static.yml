@@ -22,6 +22,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker compose build
+          sleep 5
+          docker compose down
+          echo "done building"
+      - uses: actions/upload-pages-artifact@v3
+
   # Single deploy job since we're just deploying
   deploy:
     environment:
@@ -36,8 +48,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload only the public_html folder
+          path: './public_html'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

@@ -65,6 +65,26 @@ table th {
 	padding: .5rem;
 }
 
+.button-form-submit {
+	width: 100%;
+	margin: .5rem 0;
+	border: none;
+	background-color: #353535;
+	color: #fff;
+	padding: .5rem;
+}
+
+.button-scanner {
+	border-style: solid;
+	border-width: 2px;
+	border-color: #4c4c4c;
+	padding: .5rem;
+}
+
+.button-scanner > img {
+	height: 40px;
+}
+
 .input-amount {
 	padding: .65rem;
 	border-style: solid;
@@ -85,5 +105,34 @@ table th {
 	border-width: 0 0 2px 0;
 	padding: .5rem;
 	box-sizing: border-box;
+	width: 100%;
+}
+
+.input-list-field {
+	border-style: solid;
+	border-color: #4c4c4c;
+	border-width: 2px;
+	padding: .5rem;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.table-container {
+	overflow-x: auto;
+}
+
+.modal-body {
+	padding: 1rem;
+	box-sizing: border-box;
+}
+
+/* Mobile rules */
+
+@media (max-width: 860px) {
+
+	body {
+		flex-direction: column;
+	}
+
 }
 

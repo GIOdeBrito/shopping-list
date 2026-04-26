@@ -1,0 +1,23 @@
+services:
+    app-dev:
+        container_name: shopping-list-dev
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - "./public_html:/var/www/html"
+        ports:
+            - "3000:80"
+        tty: true
+
+    bundler-dev:
+        container_name: webpack-bundler-dev
+        build:
+            context: ./webpack-bundler
+            dockerfile: Dockerfile
+        volumes:
+            - ./private/js-source:/app/sourcejs
+            - ./public_html/public/dist:/app/outdir
+            - ./webpack-bundler/webpack.config.js:/app/webpack.config.js
+        working_dir: /app
+        command: npm run dev
