@@ -29,11 +29,14 @@ jobs:
       - name: Build
         run: |
           docker compose build
-          docker compose up -d 
+          docker compose up -d
           sleep 5
           docker compose down
           echo "done building"
-      - uses: actions/upload-pages-artifact@v3
+        name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './public_html'
 
   # Single deploy job since we're just deploying
   deploy:
@@ -42,15 +45,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload only the public_html folder
-          path: './public_html'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
