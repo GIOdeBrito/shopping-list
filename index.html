@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Shopping List</title>
+		<link rel="stylesheet" href="./public/theme.css?v=1.0">
+		<script type="text/javascript" src="./public/main.js?v=1.0"></script>
+	</head>
+	<body>
+		<aside>
+			<section>
+				<div>
+					<label>Budget</label>
+					<input type="number" class="input-amount" placeholder="R$0.00" data-name="budget-field">
+				</div>
+
+				<div>
+					<label>Total Amount</label>
+					<input type="number" class="input-amount" placeholder="R$0.00" data-name="total-field" disabled>
+				</div>
+			</section>
+		</aside>
+
+		<main>
+			<h2>List</h2>
+
+			<br>
+
+			<table>
+				<thead>
+					<tr>
+						<th>Item</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+
+				<tbody></tbody>
+			</table>
+		</main>
+
+		<template data-template-name="table-item-new-request">
+			<tr data-name="add-item-row">
+				<td>
+					<button class="button-add-item">Add Item</button>
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</template>
+
+		<template data-template-name="table-item">
+			<tr>
+				<td>
+					<input class="input-list-item-field" type="text" placeholder="Item name">
+				</td>
+				<td>
+					<input data-field-name="price" class="input-list-item-field" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00">
+				</td>
+				<td>
+					<input data-field-name="qtd" class="input-list-item-field" type="number" min="1" max="600" value="1">
+				</td>
+				<td>
+					<button data-name="bremove" class="">Remove</button>
+				</td>
+			</tr>
+		</template>
+	</body>
+</html>

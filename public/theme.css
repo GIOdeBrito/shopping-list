@@ -1,0 +1,89 @@
+
+* {
+	font-family: sans-serif;
+}
+
+html, body {
+	margin: 0;
+}
+
+body {
+	display: flex;
+	margin: 1rem;
+	gap: 1rem;
+}
+
+aside > section {
+	position: sticky;
+	top: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+aside div {
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	width: 100%;
+}
+
+h2 {
+	margin: 0;
+}
+
+hr {
+	color: #000;
+}
+
+button {
+	border-style: solid;
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table th {
+	text-align: left;
+}
+
+.button-add-item {
+	padding: .5rem .75rem;
+	border-style: solid;
+	background-color: #f2f2f2;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.button-add-discount {
+	padding: .5rem;
+}
+
+.input-amount {
+	padding: .65rem;
+	border-style: solid;
+	border-color: #000;
+	border-width: 1px;
+	font-size: 1rem;
+	color: #000;
+}
+
+.input-amount.red {
+	border-color: #f11;
+	color: #f11;
+}
+
+.input-list-item-field {
+	border-style: solid;
+	border-color: #000;
+	border-width: 0 0 2px 0;
+	padding: .5rem;
+	box-sizing: border-box;
+}
+
