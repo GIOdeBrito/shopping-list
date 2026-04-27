@@ -2,17 +2,17 @@
 class EanLookup
 {
 	#data;
-	#corsProxyURL = "https://proxy.corsfix.com/";
+	#corsProxyURL = "https://api.allorigins.win/get?url=";
 	#apiUrl = "https://go-upc.com/search";
 
 	async searchAsync (ean)
 	{
-		const url = this.#corsProxyURL + '?' + encodeURI(this.#apiUrl + '?q=' + ean);
+		const url = this.#corsProxyURL + encodeURIComponent(this.#apiUrl + '?q=' + ean);
 
 		const response = await fetch(url);
-		const textcontent = await response.text();
+		const textcontent = await response.json();
 
-		return this.contentParse(textcontent);
+		return this.contentParse(textcontent.contents);
 	}
 
 	contentParse (content)
