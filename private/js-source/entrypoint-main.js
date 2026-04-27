@@ -128,8 +128,18 @@ class TableList
 		const name = root.querySelector('input[data-name="name"]');
 		const quantity = root.querySelector('input[data-name="qtd"]');
 
-		const bscanner = root.querySelector('button[data-name="bscanner"]');
+		const bscanner = root.querySelector('button[data-name="bscan"]');
 		const submit = root.querySelector('button[data-name="bsubmit"]');
+
+		bscanner.addEventListener('click', () => {
+
+			const modal = ModalFactory.new('scan', 'item-ean-scanner-modal');
+
+			modal.Root.querySelector('iframe').onload = () => {
+
+				console.log(modal.Root.querySelector('iframe').contentWindow);
+			};
+		});
 
 		ean.addEventListener('change', async () => {
 
