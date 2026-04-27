@@ -131,24 +131,28 @@ class TableList
 		const bscanner = root.querySelector('button[data-name="bscan"]');
 		const submit = root.querySelector('button[data-name="bsubmit"]');
 
-		bscanner.addEventListener('click', () => {
-
-			const modal = ModalFactory.new('scan', 'item-ean-scanner-modal');
-
-			modal.Root.querySelector('iframe').onload = () => {
-
-				console.log(modal.Root.querySelector('iframe').contentWindow);
-			};
-		});
-
-		ean.addEventListener('change', async () => {
-
-			const data = ean.value.trim();
+		const action_LookupEan = async (data) => {
 
 			const item = await EanLookup.searchAsync(data);
 
 			name.value = item.name;
 			cover.src = item.imgsrc;
+		};
+
+		bscanner.addEventListener('click', () => {
+
+			this.openScannerModal(value => {
+
+				ean.value = value;
+				action_LookupEan(value);
+			});
+		});
+
+		ean.addEventListener('change', () => {
+
+			const data = ean.value.trim();
+
+			action_LookupEan(data);
 		});
 
 		submit.addEventListener('pointerdown', ev => {
@@ -163,6 +167,40 @@ class TableList
 
 			row.querySelector('[data-field-name="price"]').focus();
 		});
+	}
+
+	static openScannerModal (successcallback)
+	{
+		const modal = ModalFactory.new('scan', 'item-ean-scanner-modal');
+		const iframe = modal.Root.querySelector('iframe');
+
+		const action_OnIframeMessage = ev => {
+
+			const json = ev.data;
+
+			if(json.action !== 'SCAN_RESULT')
+			{
+				return;
+			}
+
+			const value = json.value;
+
+			successcallback(value);
+
+			modal.destroy();
+		};
+
+		iframe.onload = () => {
+
+			console.log('Loaded iframe');
+		};
+
+		window.addEventListener('message', action_OnIframeMessage);
+
+		modal.onclose = () => {
+
+			window.removeEventListener('message', action_OnIframeMessage);
+		};
 	}
 
 	static getLastItem ()
@@ -180,3 +218,4 @@ class TableList
 		return [ ...this.#tbody.querySelectorAll('input[data-field-name="qtd"]') ].map(x => parseInt(x.value));
 	}
 }
+
