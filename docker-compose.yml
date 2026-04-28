@@ -4,20 +4,86 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+            target: dev
         volumes:
             - "./public_html:/var/www/html"
         ports:
             - "3000:80"
+        deploy:
+            resources:
+                limits:
+                    memory: 100MB
         tty: true
+        profiles: [ "dev", "release_pages" ]
+
+    app-release:
+        container_name: shopping-list-release
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: release
+        volumes:
+            - javascript-dist:/var/www/html/public/dist
+        ports:
+            - "3000:80"
+        deploy:
+            resources:
+                limits:
+                    memory: 100MB
+        depends_on:
+            bundler-release:
+              condition: service_completed_successfully
+        profiles: [ "release" ]
 
     bundler-dev:
         container_name: webpack-bundler-dev
         build:
-            context: ./webpack-bundler
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: webpack-bundler/Dockerfile
+            target: dev
         volumes:
             - ./private/js-source:/app/sourcejs
             - ./public_html/public/dist:/app/outdir
             - ./webpack-bundler/webpack.config.js:/app/webpack.config.js
         working_dir: /app
+        deploy:
+            resources:
+                limits:
+                    memory: 140MB
         command: npm run dev
+        profiles: [ "dev" ]
+
+    bundler-release:
+        container_name: webpack-bundler-release
+        build:
+            context: .
+            dockerfile: webpack-bundler/Dockerfile
+            target: release
+        volumes:
+            - javascript-dist:/app/outdir
+        working_dir: /app
+        deploy:
+            resources:
+                limits:
+                    memory: 140MB
+        command: npm run build
+        profiles: [ "release" ]
+
+    bundler-release-pages:
+        container_name: webpack-bundler-release-pages
+        build:
+            context: .
+            dockerfile: webpack-bundler/Dockerfile
+            target: release
+        volumes:
+            - ./public_html/public/dist:/app/outdir
+        working_dir: /app
+        deploy:
+            resources:
+                limits:
+                    memory: 140MB
+        command: npm run build
+        profiles: [ "release", "release_pages" ]
+
+volumes:
+    javascript-dist:

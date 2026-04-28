@@ -1,16 +1,18 @@
 # Use latest Node LTS
-FROM node:20-alpine
+FROM node:20-alpine AS base
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY webpack-bundler/package*.json .
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the files (webpack configuration)
-# Use a volume instead
-#COPY webpack.config.js .
+FROM base AS release
+COPY webpack-bundler/webpack.config.js .
+COPY private/js-source ./sourcejs
+CMD ["npm", "run", "build"]
 
+FROM base AS dev
 CMD ["npm", "run", "dev"]

@@ -1,6 +1,6 @@
 
-class EanLookup
-{
+export default new class {
+
 	#data;
 	#corsProxyURL = "https://api.allorigins.win/get?url=";
 	#apiUrl = "https://go-upc.com/search";
@@ -33,6 +33,5 @@ class EanLookup
 			imgsrc: img
 		};
 	}
-}
+};
 
-export default new EanLookup();
