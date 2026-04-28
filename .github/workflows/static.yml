@@ -28,11 +28,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build
         run: |
-          docker compose --profile release build
-          docker compose --profile release up -d
+          docker compose --profile release_pages build
+          docker compose --profile release_pages up -d
           sleep 5
-          docker compose --profile release down
-          echo "done building for release"
+          docker compose --profile release_pages down
+          echo "done building for github pages release"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
